@@ -30,14 +30,10 @@ stripe.api_key = os.getenv('STRIPE_KEY')
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 # Redis connection with fallback to memory
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-# Redis connection with fallback to memory
-redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 try:
     r = redis.Redis.from_url(redis_url, decode_responses=True)
     r.ping()
 except:
-    r = None
-    app.logger.warning("Redis not available, using memory store")
     r = None
     app.logger.warning("Redis not available, using memory store")
     r = None
