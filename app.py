@@ -1,0 +1,57 @@
+from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import requests
+import stripe
+import os
+import redis
+import logging
+import time
+import secrets
+import json
+from dotenv import load_dotenv
+
+load_dotenv()
+app = Flask(__name__)
+
+# Rate limiting with Redis
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=["500 per hour"],
+    storage_uri="redis://localhost:6379/0",
+    strategy="fixed-window"
+)
+
+stripe.api_key = os.getenv('STRIPE_KEY')
+
+# Redis connection with fallback to memory
+# Redis connection with fallback to memory
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+# Redis connection with fallback to memory
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+try:
+    r = redis.Redis.from_url(redis_url, decode_responses=True)
+    r.ping()
+except:
+    r = None
+    app.logger.warning("Redis not available, using memory store")
+    r = None
+    app.logger.warning("Redis not available, using memory store")
+    r = None
+    app.logger.warning("Redis not available, using memory store")
+
+logging.basicConfig(level=logging.INFO)
+
+# In-memory fallback (used if Redis is down)
+memory_store = {}
+
+@app.route('/register', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    email = data.get('email')
+    target_url = data.get('target_url')
+    
+    if not email or not target_url:
+        return jsonify({"error": "Email and target_url required"}), 400
+    

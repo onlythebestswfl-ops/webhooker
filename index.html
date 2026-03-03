@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Converter API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { max-width: 1000px; width: 100%; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #667eea; font-size: 3rem; margin-bottom: 10px; }
+        .tagline { color: #666; font-size: 1.3rem; margin-bottom: 30px; }
+        .status { display: inline-block; background: #4caf50; color: white; padding: 5px 15px; border-radius: 30px; font-weight: bold; margin-bottom: 30px; }
+        .card { background: #f8f9fa; border-radius: 10px; padding: 25px; margin-bottom: 25px; border-left: 5px solid #667eea; }
+        h2 { color: #333; margin-bottom: 15px; display: flex; align-items: center; }
+        h2 span { background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1rem; }
+        .code { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; overflow-x: auto; margin: 15px 0; }
+        .price { font-size: 2.5rem; color: #10b981; font-weight: bold; }
+        .price small { font-size: 1rem; color: #666; font-weight: normal; }
+        .endpoint { background: #e3f2fd; padding: 12px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #2196f3; }
+        .footer { text-align: center; color: #666; margin-top: 30px; font-size: 0.9rem; }
+        .button { background: #667eea; color: white; border: none; padding: 12px 30px; border-radius: 30px; font-size: 1.1rem; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px; }
+        .button:hover { background: #5a67d8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Webhook Converter API</h1>
+        <p class="tagline">Transform & forward webhooks automatically • $0.01 per conversion</p>
+        <div class="status">● SERVICE ONLINE</div>
+
+        <div class="card">
+            <h2><span>1</span> Get your API key</h2>
+            <p>Register with your email and target URL:</p>
+            <div class="code">
+curl -X POST http://localhost:8080/register \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"email":"you@example.com","target_url":"https://your-webhook.com"}'
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span>2</span> Pricing</h2>
+            <div class="price">$0.01 <small>per successful conversion</small></div>
+            <p>No monthly fees, no commitments. First 100 conversions free.</p>
+        </div>
+
+        <div class="card">
+            <h2><span>3</span> API Endpoints</h2>
+            <div class="endpoint"><strong>POST /register</strong> – Create account & get API key</div>
+            <div class="endpoint"><strong>POST /convert</strong> – Forward webhook (include X-API-Key header)</div>
+            <div class="endpoint"><strong>GET /health</strong> – Service health check</div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="#" class="button" onclick="alert('Service is live! Use the API directly.')">Start Converting</a>
+        </div>
+
+        <div class="footer">
+        </div>
+    </div>
+</body>
+</html>
