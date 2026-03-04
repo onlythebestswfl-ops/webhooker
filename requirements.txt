@@ -6,3 +6,7 @@ requests==2.32.3
 python-dotenv==1.0.1
 flask-limiter==3.10.0
 flask-cors
+Flask-SQLAlchemy
+psycopg2-binary
+bcrypt
+PyJWT
