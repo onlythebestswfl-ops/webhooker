@@ -14,24 +14,33 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS for all routes
 
+# Get Redis URL from environment (Railway provides this automatically)
+redis_url = os.getenv('REDIS_URL', None)
+
+# Configure rate limiter: use Redis if available, otherwise fallback to memory
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
     default_limits=["500 per hour"],
-    storage_uri="redis://localhost:6379/0",
+    storage_uri=redis_url or "memory://",
     strategy="fixed-window"
 )
 
 stripe.api_key = os.getenv('STRIPE_KEY')
 
-try:
-    r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-    r.ping()
-except:
+# Redis client with fallback
+if redis_url:
+    try:
+        r = redis.Redis.from_url(redis_url, decode_responses=True)
+        r.ping()
+    except Exception as e:
+        r = None
+        app.logger.warning(f"Redis connection failed: {e}, using memory store")
+else:
     r = None
-    app.logger.warning("Redis not available, using memory store")
+    app.logger.warning("REDIS_URL not set, using memory store")
 
 logging.basicConfig(level=logging.INFO)
 memory_store = {}
@@ -41,6 +50,7 @@ def register_user():
     data = request.get_json()
     email = data.get('email')
     target_url = data.get('target_url')
+    # Ignore password field if present
     
     if not email or not target_url:
         return jsonify({"error": "Email and target_url required"}), 400
