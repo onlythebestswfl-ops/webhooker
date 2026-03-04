@@ -41,7 +41,6 @@ def register_user():
     data = request.get_json()
     email = data.get('email')
     target_url = data.get('target_url')
-    # Ignore password field if present
     
     if not email or not target_url:
         return jsonify({"error": "Email and target_url required"}), 400
