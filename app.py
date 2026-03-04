@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
 limiter = Limiter(
     app=app,
@@ -26,7 +26,6 @@ limiter = Limiter(
 
 stripe.api_key = os.getenv('STRIPE_KEY')
 
-# Redis connection with fallback to memory
 try:
     r = redis.Redis(host='localhost', port=6379, decode_responses=True)
     r.ping()
@@ -35,8 +34,6 @@ except:
     app.logger.warning("Redis not available, using memory store")
 
 logging.basicConfig(level=logging.INFO)
-
-# In-memory fallback (used if Redis is down)
 memory_store = {}
 
 @app.route('/register', methods=['POST'])
@@ -44,7 +41,7 @@ def register_user():
     data = request.get_json()
     email = data.get('email')
     target_url = data.get('target_url')
-    # Ignore password field if present – not needed for now
+    # Ignore password field if present
     
     if not email or not target_url:
         return jsonify({"error": "Email and target_url required"}), 400
@@ -102,7 +99,6 @@ def convert_webhook():
         return jsonify({"error": "Invalid API key"}), 401
 
     try:
-        # Metered billing
         if user_config['subscription_item'] and stripe.api_key.startswith('sk_'):
             stripe.SubscriptionItem.create_usage_record(
                 user_config['subscription_item'],
